@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ============================================================
+     ARTIST CONFIG
+     ============================================================ -->
+<script>
+  const ARTIST = {
+    name:        "VARÓN ROTO",
+    tagline:     "Piano soul español — crudo, humano, sin resolver",
+    accentColor: "#C8B89A",   /* Цвет клавиши пианино / ivory */
+    bgColor:     "#0C0A0F",   /* Тёмно-фиолетовый почти чёрный */
+    /* После загрузки фото на GitHub замени ссылки: */
+    coverImage:  "https://raw.githubusercontent.com/abangon/РЕПО/main/varonroto.jpg",
+    albumCover:  "https://raw.githubusercontent.com/abangon/РЕПО/main/album1.jpg",
+    spotifyAlbumId:  "REPLACE_ME",
+    spotifyArtistId: "REPLACE_ME",
+    links: {
+      spotify:    "https://open.spotify.com/artist/REPLACE_ME",
+      appleMusic: "https://music.apple.com/artist/REPLACE_ME",
+      youtube:    "",
+      deezer:     "",
+    },
+    contactEmail: "press@varonroto.com",
+    year: "2026",
+  };
+</script>
+<!-- ============================================================ -->
+
+<title>VARÓN ROTO</title>
+<meta name="description" content="Piano soul español — crudo, humano, sin resolver" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --accent:     #C8B89A;
+    --accent-dim: rgba(200,184,154,0.12);
+    --bg:         #0C0A0F;
+    --card:       rgba(255,255,255,0.035);
+    --border:     rgba(200,184,154,0.12);
+    --text:       #E0D8CC;
+    --muted:      #6B6358;
+    --ff-head:    'Cormorant Garamond', Georgia, serif;
+    --ff-mono:    'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--ff-mono);
+    font-weight: 300;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Blurred background ── */
+  .bg-cover {
+    position: fixed; inset: 0; z-index: 0;
+    background-size: cover;
+    background-position: center top;
+    filter: blur(40px) brightness(0.12) saturate(0.4);
+    transform: scale(1.1);
+  }
+
+  /* ── Vignette ── */
+  .bg-vignette {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 30%, var(--bg) 100%);
+  }
+
+  /* ── Grain ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.7;
+  }
+
+  /* ── Page column ── */
+  .page {
+    position: relative; z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    padding: 0 1.25rem 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.75rem 0 1.5rem;
+    text-align: center;
+    gap: 0.85rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.1s forwards;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    width: 96px; height: 96px;
+  }
+  .avatar {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    /* Ivory border — как клавиша пианино */
+    outline: 1.5px solid var(--accent);
+    outline-offset: 3px;
+    filter: grayscale(20%) contrast(1.05);
+  }
+  /* Тихое свечение вокруг аватара */
+  .avatar-glow {
+    position: absolute; inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,184,154,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-name {
+    font-family: var(--ff-head);
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .hero-divider {
+    width: 24px; height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .hero-tagline {
+    font-family: var(--ff-head);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    max-width: 28ch;
+    line-height: 1.5;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 0.56rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.7;
+    margin: 1.75rem 0 0.7rem;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0 0;
+  }
+
+  /* ── Streaming buttons ── */
+  .stream-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.25s forwards;
+  }
+
+  .stream-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stream-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--accent);
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+    z-index: 0;
+  }
+  .stream-btn:hover { border-color: var(--accent); transform: translateX(3px); }
+  .stream-btn:hover::before { transform: translateX(0); }
+  .stream-btn:active { transform: scale(0.98); }
+
+  .stream-btn__icon {
+    width: 18px; height: 18px;
+    fill: var(--text);
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+    transition: fill 0.2s;
+  }
+  .stream-btn:hover .stream-btn__icon { fill: var(--bg); }
+
+  .stream-btn__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text);
+    position: relative; z-index: 1;
+    transition: color 0.2s;
+    flex: 1;
+  }
+  .stream-btn:hover .stream-btn__label { color: var(--bg); }
+
+  .stream-btn__arrow {
+    font-size: 0.72rem;
+    color: var(--muted);
+    position: relative; z-index: 1;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .stream-btn:hover .stream-btn__arrow { color: var(--bg); transform: translateX(4px); }
+
+  /* ── Player ── */
+  .player-section {
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .player-wrap {
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .player-wrap iframe { display: block; width: 100%; }
+
+  /* ── About ── */
+  .about-section {
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .label-pill {
+    display: inline-block;
+    font-size: 0.56rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 0.22rem 0.65rem;
+    margin-bottom: 1.1rem;
+    font-weight: 400;
+  }
+
+  .about-lead {
+    font-family: var(--ff-head);
+    font-size: 1.2rem;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 0.9rem;
+    font-weight: 300;
+  }
+
+  .about-body {
+    font-size: 0.75rem;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+  }
+
+  .about-quote {
+    border-left: 1.5px solid var(--accent);
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin: 1.1rem 0;
+    font-family: var(--ff-head);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .tag {
+    font-size: 0.57rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 0.22rem 0.6rem;
+    color: var(--muted);
+  }
+
+  /* ── Contact ── */
+  .contact-section {
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.22s, color 0.22s;
+  }
+  .contact-btn:hover { background: var(--accent); color: var(--bg); }
+  .contact-btn svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (min-width: 520px) {
+    .page { padding: 0 0 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-cover" id="bg-cover"></div>
+<div class="bg-vignette"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="avatar-wrap">
+      <img class="avatar" id="avatar" src="" alt="VARÓN ROTO" />
+      <div class="avatar-glow"></div>
+    </div>
+    <h1 class="hero-name">VARÓN ROTO</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline" id="hero-tagline"></p>
+  </div>
+
+  <!-- STREAMING -->
+  <p class="section-label">Escuchar en</p>
+  <div class="stream-list" id="stream-list"></div>
+
+  <hr class="divider" />
+
+  <!-- LATEST RELEASE -->
+  <div class="player-section" id="player-section">
+    <p class="section-label">Último lanzamiento</p>
+    <div class="player-wrap" id="player-wrap"></div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <div class="about-section">
+    <p class="section-label">About</p>
+    <span class="label-pill">Samsara Wheel Records</span>
+
+    <p class="about-lead">
+      AI-driven music label. 20+ years of industry experience. One mission — sound that lands.
+    </p>
+
+    <p class="about-body">
+      We produce original music across multiple genres — fast, licensed, and priced for business. If you need tracks that carry weight, we can help.
+    </p>
+
+    <div class="about-quote">
+      "Need emotional music for your project? Film, brand, venue, digital content — we deliver original compositions to order."
+    </div>
+
+    <p class="about-body">
+      VARÓN ROTO is Spanish piano soul. A man's voice over a single piano — raw, close-mic, unresolved. No orchestra. No polish. Just what's left when everything else falls away.
+    </p>
+
+    <div class="tag-row">
+      <span class="tag">Film & TV</span>
+      <span class="tag">Brand Campaigns</span>
+      <span class="tag">Sync Licensing</span>
+      <span class="tag">Digital Content</span>
+      <span class="tag">Custom Compositions</span>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <div class="contact-section">
+    <p class="section-label">Contacto / Licensing</p>
+    <a class="contact-btn" id="contact-btn" href="">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      <span id="contact-label"></span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <p class="footer" id="footer"></p>
+
+</div>
+
+<script>
+  document.documentElement.style.setProperty('--accent', ARTIST.accentColor);
+  document.documentElement.style.setProperty('--bg',     ARTIST.bgColor);
+
+  /* Background & avatar */
+  if (ARTIST.coverImage && !ARTIST.coverImage.includes('РЕПО')) {
+    document.getElementById('bg-cover').style.backgroundImage = `url(${ARTIST.coverImage})`;
+    document.getElementById('avatar').src = ARTIST.coverImage;
+  }
+
+  document.getElementById('hero-tagline').textContent = ARTIST.tagline;
+
+  /* Streaming buttons */
+  const platforms = {
+    spotify: {
+      label: 'Spotify',
+      icon: '<svg class="stream-btn__icon" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.563 17.317a.75.75 0 01-1.032.249C13.838 15.7 10.613 15.3 7.21 16.1a.75.75 0 01-.353-1.456c3.717-.9 7.268-.514 10.008 1.044a.75.75 0 01.698 1.629zm1.482-3.303a.937.937 0 01-1.29.31c-2.896-1.78-7.312-2.296-10.733-1.257a.937.937 0 01-.545-1.791c3.914-1.19 8.777-.608 12.13 1.448a.937.937 0 01.438 1.29zm.127-3.44C15.515 8.523 10.055 8.34 6.958 9.284a1.125 1.125 0 01-.658-2.151c3.584-1.097 9.542-.885 13.306 1.47a1.124 1.124 0 01-1.434 1.73z"/></svg>'
+    },
+    appleMusic: {
+      label: 'Apple Music',
+      icon: '<svg class="stream-btn__icon" viewBox="0 0 24 24"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026C4.786.07 4.043.15 3.34.428 2.004.958 1.04 1.88.475 3.208c-.192.448-.292.925-.363 1.408-.056.392-.08.79-.093 1.18 0 .05-.008.103-.012.154v11.899c.01.16.018.32.028.48.058.894.292 1.72.786 2.465.749 1.14 1.8 1.83 3.14 2.07.418.07.839.103 1.265.107h11.564c.483-.012.963-.048 1.434-.14 1.272-.253 2.282-.917 3.002-1.997.4-.598.615-1.266.695-1.974.044-.386.058-.773.058-1.16l.002-12.066c0-.053-.004-.104-.006-.155zm-5.73 9.975l-1.57.87-1.28.71-1.35.75V11.38c0-.39-.22-.74-.56-.93-.34-.18-.76-.18-1.1.01l-3.25 1.8c-.34.19-.55.55-.55.93v7.16l-1.02-.56V4.93l9.68 2.83v8.34z"/></svg>'
+    },
+    youtube: {
+      label: 'YouTube Music',
+      icon: '<svg class="stream-btn__icon" viewBox="0 0 24 24"><path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19.104c-3.924 0-7.104-3.18-7.104-7.104S8.076 4.896 12 4.896s7.104 3.18 7.104 7.104-3.18 7.104-7.104 7.104zm0-13.332c-3.432 0-6.228 2.796-6.228 6.228S8.568 18.228 12 18.228s6.228-2.796 6.228-6.228S15.432 5.772 12 5.772zM9.684 15.54V8.46L15.816 12l-6.132 3.54z"/></svg>'
+    },
+    deezer: {
+      label: 'Deezer',
+      icon: '<svg class="stream-btn__icon" viewBox="0 0 24 24"><path d="M18.81 4.16v3.03H24V4.16h-5.19zM6.27 8.38v3.03h5.19V8.38H6.27zm6.27 0v3.03h5.19V8.38h-5.19zm6.27 0v3.03H24V8.38h-5.19zM6.27 12.6v3.04h5.19V12.6H6.27zm6.27 0v3.04h5.19V12.6h-5.19zm6.27 0v3.04H24V12.6h-5.19zM0 16.81v3.03h5.19v-3.03H0zm6.27 0v3.03h5.19v-3.03H6.27zm6.27 0v3.03h5.19v-3.03h-5.19zm6.27 0v3.03H24v-3.03h-5.19z"/></svg>'
+    },
+  };
+
+  const list = document.getElementById('stream-list');
+  Object.entries(ARTIST.links).forEach(([key, url]) => {
+    if (!url || url.includes('REPLACE_ME')) return;
+    const p = platforms[key];
+    if (!p) return;
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.className = 'stream-btn';
+    a.innerHTML = `${p.icon}<span class="stream-btn__label">${p.label}</span><span class="stream-btn__arrow">→</span>`;
+    list.appendChild(a);
+  });
+
+  /* Spotify embed */
+  const ps = document.getElementById('player-section');
+  const pw = document.getElementById('player-wrap');
+  if (ARTIST.spotifyAlbumId && !ARTIST.spotifyAlbumId.includes('REPLACE_ME')) {
+    pw.innerHTML = `<iframe src="https://open.spotify.com/embed/album/${ARTIST.spotifyAlbumId}?utm_source=generator&theme=0" height="380" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+  } else {
+    ps.style.display = 'none';
+    ps.previousElementSibling.style.display = 'none';
+  }
+
+  /* Contact */
+  document.getElementById('contact-btn').href = `mailto:${ARTIST.contactEmail}`;
+  document.getElementById('contact-label').textContent = ARTIST.contactEmail;
+
+  /* Footer */
+  document.getElementById('footer').textContent = `© ${ARTIST.year} Samsara Wheel Records`;
+</script>
+</body>
+</html>
